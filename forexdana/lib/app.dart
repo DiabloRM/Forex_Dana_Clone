@@ -43,12 +43,12 @@ class _AppState extends State<App> {
           onTap: _onItemTapped,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.show_chart),
+              icon: Icon(Icons.show_chart_outlined),
               label: 'Markets',
             ),
             BottomNavigationBarItem(icon: Icon(Icons.sync), label: 'Positions'),
             BottomNavigationBarItem(
-              icon: Icon(Icons.crop_square),
+              icon: Icon(Icons.compass_calibration_outlined),
               label: 'Square',
             ),
             BottomNavigationBarItem(

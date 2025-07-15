@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/action_icon.dart';
 import '../widgets/instrument_row.dart';
 import '../widgets/tab_item.dart';
+import 'user_screen.dart';
 
 class MarketScreen extends StatelessWidget {
   const MarketScreen({Key? key}) : super(key: key);
@@ -15,9 +16,17 @@ class MarketScreen extends StatelessWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.grey.shade300,
-            child: Icon(Icons.person, color: Colors.grey.shade600),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UserScreen()),
+              );
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.grey.shade300,
+              child: Icon(Icons.person, color: Colors.grey.shade600),
+            ),
           ),
         ),
         title: Container(
