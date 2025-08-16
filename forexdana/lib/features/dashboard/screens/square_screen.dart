@@ -1,90 +1,178 @@
 import 'package:flutter/material.dart';
 
-class SquareScreen extends StatelessWidget {
-  const SquareScreen({Key? key}) : super(key: key);
+class SquareScreen extends StatefulWidget {
+  final int initialIndex;
+  const SquareScreen({Key? key, this.initialIndex = 1}) : super(key: key);
+
+  @override
+  State<SquareScreen> createState() => _SquareScreenState();
+}
+
+class _SquareScreenState extends State<SquareScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: 4,
+      vsync: this,
+      initialIndex: widget.initialIndex,
+    );
+  }
+
+  @override
+  void didUpdateWidget(SquareScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialIndex != widget.initialIndex) {
+      _tabController.animateTo(widget.initialIndex);
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top tab bar
+            // Tab navigation bar
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  _SquareTab(label: 'Live Stream', isActive: true),
-                  _SquareTab(label: 'Chat Room'),
-                  _SquareTab(label: 'My Message'),
-                  _SquareTab(label: 'Subscribe'),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: TabBar(
+                controller: _tabController,
+                isScrollable: false,
+                indicatorColor: Colors.transparent,
+                dividerColor: Colors.transparent,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.grey.shade600,
+                labelStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal,
+                ),
+                labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                tabs: const [
+                  Tab(
+                    child: Text('Live Stream', overflow: TextOverflow.visible),
+                  ),
+                  Tab(child: Text('Chat Room', overflow: TextOverflow.visible)),
+                  Tab(
+                    child: Text('My Message', overflow: TextOverflow.visible),
+                  ),
+                  Tab(child: Text('Subscribe', overflow: TextOverflow.visible)),
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Text(
-                'Live Stream History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ),
-            // Live stream cards grid
+
+            // Content area
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          childAspectRatio: 0.85, // Adjusted for better spacing
-                        ),
-                    itemCount: 16,
-                    itemBuilder: (context, index) {
-                      return _LiveStreamCard(
-                        imageUrl: '', // Placeholder
-                        title: 'Unlock Profit Potential\nWith Expert LEO',
-                        date: '07/${30 - (index % 15)} 14:45',
-                        views: (45323 ~/ (index + 1)).toString(),
-                        host: 'BtcDana',
-                      );
-                    },
-                  ),
-                ),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildLiveStreamTab(),
+                  _buildChatRoomTab(),
+                  _buildMyMessageTab(),
+                  _buildSubscribeTab(),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
-}
 
-class _SquareTab extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  const _SquareTab({required this.label, this.isActive = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isActive ? Colors.black : Colors.grey,
-          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-          fontSize: 16,
+  Widget _buildLiveStreamTab() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Text(
+            'Live Stream History',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
         ),
-        overflow: TextOverflow.ellipsis,
+        // Live stream cards grid
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.85,
+                ),
+                itemCount: 16,
+                itemBuilder: (context, index) {
+                  return _LiveStreamCard(
+                    imageUrl: '', // Placeholder
+                    title: 'Unlock Profit Potential\nWith Expert LEO',
+                    date: '07/${30 - (index % 15)} 14:45',
+                    views: (45323 ~/ (index + 1)).toString(),
+                    host: 'BtcDana',
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildChatRoomTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _NoDataIllustration(),
+          SizedBox(height: 24),
+          Text('No data', style: TextStyle(color: Colors.grey, fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMyMessageTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _NoDataIllustration(),
+          SizedBox(height: 24),
+          Text('No data', style: TextStyle(color: Colors.grey, fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubscribeTab() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _NoDataIllustration(),
+          SizedBox(height: 24),
+          Text('No data', style: TextStyle(color: Colors.grey, fontSize: 16)),
+        ],
       ),
     );
   }
@@ -224,6 +312,163 @@ class _LiveStreamCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _NoDataIllustration extends StatelessWidget {
+  const _NoDataIllustration();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Background cards
+        Positioned(
+          top: 20,
+          child: Transform.rotate(
+            angle: -0.1,
+            child: Container(
+              width: 120,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+
+        // Middle card
+        Positioned(
+          top: 10,
+          child: Transform.rotate(
+            angle: 0.05,
+            child: Container(
+              width: 120,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+
+        // Front card with orange header
+        Container(
+          width: 120,
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: Column(
+            children: [
+              // Orange header
+              Container(
+                width: double.infinity,
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+              ),
+              // Content lines
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 2,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 80,
+                        height: 2,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 40,
+                        height: 2,
+                        color: Colors.grey.shade400,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Pen/pencil
+        Positioned(
+          top: 5,
+          right: 15,
+          child: Transform.rotate(
+            angle: 0.3,
+            child: Container(
+              width: 60,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+        ),
+
+        // Pen tip
+        Positioned(
+          top: 3,
+          right: 10,
+          child: Transform.rotate(
+            angle: 0.3,
+            child: Container(
+              width: 0,
+              height: 0,
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: Colors.black, width: 8),
+                  top: BorderSide(color: Colors.transparent, width: 4),
+                  bottom: BorderSide(color: Colors.transparent, width: 4),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Dashed lines (activity indicator)
+        Positioned(
+          top: 0,
+          right: 25,
+          child: Row(
+            children: [
+              for (int i = 0; i < 3; i++) ...[
+                Container(
+                  width: 2,
+                  height: 2,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(1),
+                  ),
+                ),
+                if (i < 2) const SizedBox(width: 2),
+              ],
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

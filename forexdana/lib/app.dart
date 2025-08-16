@@ -3,9 +3,12 @@ import 'features/dashboard/screens/market_screen.dart';
 import 'features/dashboard/screens/positions_screen.dart';
 import 'features/dashboard/screens/profile_screen.dart';
 import 'features/dashboard/screens/square_screen.dart';
+import 'core/theme/app_theme.dart';
 
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  final Function(AppThemeMode)? onThemeChanged;
+
+  const App({Key? key, this.onThemeChanged}) : super(key: key);
 
   @override
   State<App> createState() => _AppState();
@@ -13,17 +16,22 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _selectedIndex = 0;
-
-  static final List<Widget> _screens = <Widget>[
-    MarketScreen(),
-    PositionsScreen(),
-    SquareScreen(),
-    ProfileScreen(),
-  ];
+  int _squareTabIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      // Reset square tab index when switching to square tab
+      if (index == 2) {
+        _squareTabIndex = 0;
+      }
+    });
+  }
+
+  void _onGoToSquare(int tabIndex) {
+    setState(() {
+      _selectedIndex = 2; // Switch to Square tab
+      _squareTabIndex = tabIndex;
     });
   }
 
@@ -33,7 +41,9 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       title: 'ForexDana Clone',
       home: Scaffold(
-        body: _screens[_selectedIndex],
+        body: _selectedIndex == 2
+            ? SquareScreen(initialIndex: _squareTabIndex)
+            : _buildScreen(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.black,
@@ -59,5 +69,21 @@ class _AppState extends State<App> {
         ),
       ),
     );
+  }
+
+  Widget _buildScreen(int index) {
+    switch (index) {
+      case 0:
+        return MarketScreen(
+          onGoToSquare: _onGoToSquare,
+          onThemeChanged: widget.onThemeChanged,
+        );
+      case 1:
+        return PositionsScreen();
+      case 3:
+        return ProfileScreen();
+      default:
+        return Container(); // Should not reach here
+    }
   }
 }

@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import '../widgets/action_icon.dart';
 import '../widgets/instrument_row.dart';
-import '../widgets/tab_item.dart';
 import 'user_screen.dart';
+import '../../chat/screens/customer_support.dart';
+import '../../../core/theme/app_theme.dart';
 
 class MarketScreen extends StatelessWidget {
-  const MarketScreen({Key? key}) : super(key: key);
+  final Function(int)? onGoToSquare;
+  final Function(AppThemeMode)? onThemeChanged;
+
+  const MarketScreen({Key? key, this.onGoToSquare, this.onThemeChanged})
+      : super(key: key);
+
+  void _showCustomerServiceDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CustomerServiceDialog();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +34,10 @@ class MarketScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const UserScreen()),
+                MaterialPageRoute(
+                  builder: (context) =>
+                      UserScreen(onThemeChanged: onThemeChanged),
+                ),
               );
             },
             child: CircleAvatar(
@@ -58,13 +75,17 @@ class MarketScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.headset_mic_outlined, color: Colors.black),
-            onPressed: () {},
+            onPressed: () => _showCustomerServiceDialog(context),
           ),
           Stack(
             children: [
               IconButton(
                 icon: const Icon(Icons.mail_outline, color: Colors.black),
-                onPressed: () {},
+                onPressed: () {
+                  if (onGoToSquare != null) {
+                    onGoToSquare!(2); // Go to Messages tab (index 2)
+                  }
+                },
               ),
               Positioned(
                 right: 8,
@@ -320,42 +341,163 @@ class MarketScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // Views, Calendar, Analysis row
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Views',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 40),
-                    Text(
-                      'Calendar',
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                    const SizedBox(width: 40),
-                    Text(
-                      'Analysis',
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                    const Spacer(),
-                    Icon(Icons.keyboard_arrow_up, color: Colors.grey),
-                  ],
-                ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Text(
+              'Views',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 80), // For bottom nav bar spacing
+            const SizedBox(width: 40),
+            Text(
+              'Calendar',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            const SizedBox(width: 40),
+            Text(
+              'Analysis',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            const Spacer(),
+            Icon(Icons.keyboard_arrow_up, color: Colors.grey),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomerServiceDialog extends StatelessWidget {
+  const CustomerServiceDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            const Text(
+              'Customer Service',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Subtitle
+            const Text(
+              'Please choose the way to get the verification code',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+
+            // Online Support Section
+            Row(
+              children: [
+                // Icon
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: const Icon(
+                    Icons.headset_mic,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+
+                // Text content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Online support',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        '7x24Hour online',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Start Chat Button
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForexDanaChatbot(),
+                      ),
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.grey, width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                  ),
+                  child: const Text(
+                    'Start Chat',
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Footer text
+            RichText(
+              text: const TextSpan(
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+                children: [
+                  TextSpan(
+                    text:
+                        'If you do not receive the verification code, please ',
+                  ),
+                  TextSpan(
+                    text: 'contact customer service',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
