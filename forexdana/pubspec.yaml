@@ -14,6 +14,7 @@ dependencies:
   # Core packages for your app to run
   cupertino_icons: ^1.0.8
   provider: ^6.1.2 # Moved from dev_dependencies and updated to latest version
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

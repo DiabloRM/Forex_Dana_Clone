@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forexdana/features/auth/screens/account_setting.dart';
+import 'package:forexdana/core/utils/security.dart';
+import 'package:forexdana/features/dashboard/screens/settings_screen.dart';
 import '../../../core/theme/app_theme.dart';
 
 class UserScreen extends StatefulWidget {
@@ -142,8 +144,14 @@ class _UserScreenState extends State<UserScreen> {
             tooltip: 'Change Theme',
           ),
           IconButton(
-            icon: const Icon(Icons.security, color: Colors.black),
-            onPressed: () {},
+            icon: const Icon(Icons.settings_outlined, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -163,7 +171,7 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const AccountSettingScreen(),
+                            builder: (context) => const SettingsScreen(),
                           ),
                         );
                       },
@@ -418,6 +426,13 @@ class _UserScreenState extends State<UserScreen> {
                         child: _buildRecommendItem(
                           Icons.security_outlined,
                           'Security',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SecurityScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Expanded(
@@ -518,10 +533,15 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  Widget _buildRecommendItem(IconData icon, String label) {
+  Widget _buildRecommendItem(IconData icon, String label,
+      {Function()? onPressed}) {
     return InkWell(
       onTap: () {
-        _handleRecommendItemTap(label);
+        if (onPressed != null) {
+          onPressed();
+        } else {
+          _handleRecommendItemTap(label);
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -581,12 +601,6 @@ class _UserScreenState extends State<UserScreen> {
         break;
       case 'social':
         _showFeatureDialog('Social Trading', 'Connect with other traders.');
-        break;
-      case 'security':
-        _showFeatureDialog(
-          'Security Settings',
-          'Manage your account security.',
-        );
         break;
       case 'tutorial':
         _showFeatureDialog(

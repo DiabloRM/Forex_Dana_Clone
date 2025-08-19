@@ -4,6 +4,10 @@ import '../widgets/instrument_row.dart';
 import 'user_screen.dart';
 import '../../chat/screens/customer_support.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../wallet/screens/deposit_screen.dart';
+import 'demo_screen.dart';
+import 'task_screen.dart';
+import 'referral_screen.dart';
 
 class MarketScreen extends StatelessWidget {
   final Function(int)? onGoToSquare;
@@ -149,7 +153,13 @@ class MarketScreen extends StatelessWidget {
                         vertical: 10,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const DepositScreen(),
+                        ),
+                      );
+                    },
                     child: const Text(
                       'Deposit',
                       style: TextStyle(
@@ -169,15 +179,51 @@ class MarketScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ActionIcon(
-                    icon: Icons.assignment,
+                    icon: Icons.task_alt,
                     label: 'Task',
                     isNew: true,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const BDCMiningApp(),
+                        ),
+                      );
+                    },
                   ),
-                  ActionIcon(icon: Icons.add_box_outlined, label: 'Demo'),
-                  ActionIcon(icon: Icons.person_outline, label: 'Referral'),
+                  ActionIcon(
+                    icon: Icons.add_box_outlined,
+                    label: 'Demo',
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const DemoScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  ActionIcon(
+                    icon: Icons.person_outline,
+                    label: 'Referral',
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ReferralScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   ActionIcon(
                     icon: Icons.emoji_events_outlined,
                     label: 'Mining',
+                    onTap: () {
+                      // TODO: Navigate to Mining screen
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Mining feature coming soon!'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

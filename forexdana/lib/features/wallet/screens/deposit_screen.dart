@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:forexdana/features/chat/screens/customer_support.dart';
+import 'trx_screen.dart';
+import 'bitcoin_screen.dart';
+import 'trc20_screen.dart';
+import 'erc20_screen.dart';
 
 class DepositScreen extends StatelessWidget {
-  const DepositScreen({Key? key}) : super(key: key);
+  const DepositScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +34,13 @@ class DepositScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.headset_mic,
-              color: Colors.black,
-              size: 24,
-            ),
+            icon: const Icon(Icons.headset_mic_outlined, color: Colors.black),
             onPressed: () {
-              // Handle microphone action
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ForexDanaChatbot(),
+                ),
+              );
             },
           ),
         ],
@@ -112,6 +117,13 @@ class DepositScreen extends StatelessWidget {
                   ),
                   title: 'TRX',
                   subtitle: 'Check the address carefully',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TrxScreen(),
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -138,6 +150,13 @@ class DepositScreen extends StatelessWidget {
                   ),
                   title: 'Bitcoin',
                   subtitle: 'Check the address carefully',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BitcoinScreen(),
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -187,6 +206,13 @@ class DepositScreen extends StatelessWidget {
                   ),
                   title: 'Tether(TRC20)',
                   subtitle: 'Deposit using USDT, Quick and Secured',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Trc20Screen(),
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -239,6 +265,13 @@ class DepositScreen extends StatelessWidget {
                   ),
                   title: 'Tether(ERC20)',
                   subtitle: 'Mohon periksa alamat dengan teliti',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Erc20Screen(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -255,52 +288,57 @@ class PaymentOption extends StatelessWidget {
   final Widget icon;
   final String title;
   final String subtitle;
+  final VoidCallback? onTap;
 
   const PaymentOption({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Row(
-        children: [
-          icon,
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        child: Row(
+          children: [
+            icon,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF9E9E9E),
-                    fontWeight: FontWeight.w400,
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF9E9E9E),
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Icon(
-            Icons.chevron_right,
-            color: Color(0xFFBDBDBD),
-            size: 24,
-          ),
-        ],
+            const Icon(
+              Icons.chevron_right,
+              color: Color(0xFFBDBDBD),
+              size: 24,
+            ),
+          ],
+        ),
       ),
     );
   }
