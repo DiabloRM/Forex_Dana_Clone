@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/action_icon.dart';
 import '../widgets/instrument_row.dart';
 import 'user_screen.dart';
-import '../../chat/screens/customer_support.dart';
+import '../../chat/screens/customer_support.dart' as chat;
 import '../../../core/theme/app_theme.dart';
 import '../../wallet/screens/deposit_screen.dart';
 import 'demo_screen.dart';
@@ -196,7 +196,9 @@ class MarketScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const DemoScreen(),
+                          builder: (context) => DemoScreen(
+                            onGoToSquare: onGoToSquare,
+                          ),
                         ),
                       );
                     },
@@ -502,7 +504,7 @@ class CustomerServiceDialog extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ForexDanaChatbot(),
+                        builder: (context) => const chat.ForexDanaChatbot(),
                       ),
                     );
                   },

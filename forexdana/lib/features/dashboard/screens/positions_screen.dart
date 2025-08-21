@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../trading/screens/trading_screen.dart';
 
 class PositionsScreen extends StatefulWidget {
   const PositionsScreen({Key? key}) : super(key: key);
@@ -287,20 +288,29 @@ class _PositionsScreenState extends State<PositionsScreen> {
           ),
         ),
         const SizedBox(height: 32),
-        Container(
-          width: 200,
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: const Center(
-            child: Text(
-              'Go trade',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TradingScreen(),
+              ),
+            );
+          },
+          child: Container(
+            width: 200,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: const Center(
+              child: Text(
+                'Go trade',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

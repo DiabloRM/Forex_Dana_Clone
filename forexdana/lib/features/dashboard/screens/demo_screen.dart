@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Assuming the existence of these files from your original code
+// import 'package:forexdana/features/chat/screens/customer_support.dart';
+// import 'package:forexdana/features/dashboard/screens/square_screen.dart';
+
+// Dummy ForexDanaChatbot for demonstration purposes
+class ForexDanaChatbot extends StatelessWidget {
+  const ForexDanaChatbot({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Customer Support'),
+      content: const Text('Chatbot functionality would be here.'),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Close'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class DemoScreen extends StatefulWidget {
-  const DemoScreen({super.key});
+  final Function(int)? onGoToSquare;
+
+  const DemoScreen({super.key, this.onGoToSquare});
 
   @override
   State<DemoScreen> createState() => _DemoScreenState();
 }
 
 class _DemoScreenState extends State<DemoScreen> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFF4A5568),
       appBar: AppBar(
@@ -39,14 +60,37 @@ class _DemoScreenState extends State<DemoScreen> {
           IconButton(
             icon: const Icon(Icons.headset, color: Colors.white),
             onPressed: () {
-              // TODO: Add customer support functionality
+              showDialog(
+                context: context,
+                builder: (context) => const ForexDanaChatbot(),
+              );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.mail_outline, color: Colors.white),
-            onPressed: () {
-              // TODO: Add mail functionality
-            },
+          // Implemented Stack for notification dot from the first code snippet
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.mail_outline, color: Colors.white),
+                onPressed: () {
+                  // Implemented onGoToSquare callback from the first code snippet
+                  if (widget.onGoToSquare != null) {
+                    widget.onGoToSquare!(2); // Go to Messages tab (index 2)
+                  }
+                },
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -70,7 +114,7 @@ class _DemoScreenState extends State<DemoScreen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -101,7 +145,6 @@ class _DemoScreenState extends State<DemoScreen> {
                           const SizedBox(height: 12),
                           ElevatedButton(
                             onPressed: () {
-                              // TODO: Add account activation functionality
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -128,58 +171,60 @@ class _DemoScreenState extends State<DemoScreen> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Container(
+                    SizedBox(
                       width: 80,
                       height: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            child: Container(
-                              width: 30,
-                              height: 20,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 80,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF007AFF),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const Icon(
-                                Icons.lock,
-                                color: Colors.yellow,
-                                size: 16,
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(6),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 15,
-                            right: 8,
-                            child: Container(
-                              width: 16,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[600],
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: const Icon(
-                                Icons.mail,
-                                color: Colors.white,
-                                size: 10,
+                            Positioned(
+                              top: 10,
+                              child: Container(
+                                width: 30,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF007AFF),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.lock,
+                                  color: Colors.yellow,
+                                  size: 16,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              bottom: 15,
+                              right: 8,
+                              child: Container(
+                                width: 16,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[600],
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: const Icon(
+                                  Icons.mail,
+                                  color: Colors.white,
+                                  size: 10,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -245,7 +290,7 @@ class _DemoScreenState extends State<DemoScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -335,337 +380,6 @@ class TradingInstrument {
   });
 }
 
-// Data for different pages
-final List<TradingInstrument> cryptoInstruments1 = [
-  TradingInstrument(
-    symbol: 'ATOM/USDT',
-    price: '4.468',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: 'https://cryptologos.cc/logos/cosmos-atom-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ALGO/USDT',
-    price: '0.2540',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF000000),
-    iconUrl: 'https://cryptologos.cc/logos/algorand-algo-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'AAVE/USDT',
-    price: '289.85',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2B6CB0),
-    iconUrl: 'https://cryptologos.cc/logos/aave-aave-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ZEC/USDT',
-    price: '35.95',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: 'https://cryptologos.cc/logos/zcash-zec-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'UNI/USDT',
-    price: '10.613',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED64A6),
-    iconUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'LRC/USDT',
-    price: '0.0886',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://cryptologos.cc/logos/loopring-lrc-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ICP/USDT',
-    price: '5.314',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF38A169),
-    iconUrl: 'https://cryptologos.cc/logos/internet-computer-icp-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'GRT/USDT',
-    price: '0.09117',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2B6CB0),
-    iconUrl: 'https://cryptologos.cc/logos/the-graph-grt-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'XLM/USDT',
-    price: '0.41023',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: 'https://cryptologos.cc/logos/stellar-xlm-logo.png',
-  ),
-];
-
-final List<TradingInstrument> forexInstruments1 = [
-  TradingInstrument(
-    symbol: 'GBPJPY',
-    price: '199.923',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://flagcdn.com/w40/gb.png',
-  ),
-  TradingInstrument(
-    symbol: 'NZDUSD',
-    price: '0.59319',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/nz.png',
-  ),
-  TradingInstrument(
-    symbol: 'USDCAD',
-    price: '1.38032',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/us.png',
-  ),
-  TradingInstrument(
-    symbol: 'USDCHF',
-    price: '0.80616',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://flagcdn.com/w40/us.png',
-  ),
-  TradingInstrument(
-    symbol: 'EURAUD',
-    price: '1.79545',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-  TradingInstrument(
-    symbol: 'EURCAD',
-    price: '1.61534',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-  TradingInstrument(
-    symbol: 'AUDNZD',
-    price: '1.09878',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/au.png',
-  ),
-  TradingInstrument(
-    symbol: 'GBPCAD',
-    price: '1.87108',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/gb.png',
-  ),
-  TradingInstrument(
-    symbol: 'XAGUSD',
-    price: '38.116',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: '',
-  ),
-];
-
-final List<TradingInstrument> forexInstruments2 = [
-  TradingInstrument(
-    symbol: 'NZDJPY',
-    price: '87.484',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF38A169),
-    iconUrl: 'https://flagcdn.com/w40/nz.png',
-  ),
-  TradingInstrument(
-    symbol: 'CADCHF',
-    price: '0.58405',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://flagcdn.com/w40/ca.png',
-  ),
-  TradingInstrument(
-    symbol: 'EURNZD',
-    price: '1.97289',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-  TradingInstrument(
-    symbol: 'NZDCHF',
-    price: '0.47821',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/nz.png',
-  ),
-  TradingInstrument(
-    symbol: 'NZDCAD',
-    price: '0.81876',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/nz.png',
-  ),
-  TradingInstrument(
-    symbol: 'GBPNZD',
-    price: '2.28521',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/gb.png',
-  ),
-  TradingInstrument(
-    symbol: 'GBPAUD',
-    price: '2.07968',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/gb.png',
-  ),
-  TradingInstrument(
-    symbol: 'DOGE/USDT',
-    price: '0.22386',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFFECC94B),
-    iconUrl: 'https://cryptologos.cc/logos/dogecoin-doge-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'EURJPY',
-    price: '172.602',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-];
-
-final List<TradingInstrument> cryptoInstruments2 = [
-  TradingInstrument(
-    symbol: 'SOL/USDT',
-    price: '182.260',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF9F7AEA),
-    iconUrl: 'https://cryptologos.cc/logos/solana-sol-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'TRX/USDT',
-    price: '0.34810',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: 'https://cryptologos.cc/logos/tron-trx-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'HBAR/USDT',
-    price: '0.24405',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: 'https://cryptologos.cc/logos/hedera-hbar-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'AUDUSD',
-    price: '0.65184',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF38A169),
-    iconUrl: 'https://flagcdn.com/w40/au.png',
-  ),
-  TradingInstrument(
-    symbol: 'DOGE/USDT Max',
-    price: '0.22370',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFECC94B),
-    iconUrl: 'https://cryptologos.cc/logos/dogecoin-doge-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'XRP/USDT',
-    price: '2.98550',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'BTC/USDT Max',
-    price: '115223.20',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ETH/USDT Max',
-    price: '4317.36',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'BNB/USDT',
-    price: '834.68',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFECC94B),
-    iconUrl: 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
-  ),
-];
-
-final List<TradingInstrument> stocksAndCrypto = [
-  TradingInstrument(
-    symbol: 'USOIL',
-    price: '62.921',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'EURUSD',
-    price: '1.17034',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-  TradingInstrument(
-    symbol: 'TRX/USDT Max',
-    price: '0.34813',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://cryptologos.cc/logos/tron-trx-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'USDJPY',
-    price: '147.482',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/us.png',
-  ),
-  TradingInstrument(
-    symbol: 'Amazon.com, Inc',
-    price: '231.00',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'Tesla Inc',
-    price: '330.51',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'Apple Inc',
-    price: '231.60',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'FIL/USDT',
-    price: '2.466',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://cryptologos.cc/logos/filecoin-fil-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'NIFTY 50',
-    price: '25008.20',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF9F7AEA),
-    iconUrl: '',
-  ),
-];
-
 // Data for popular instruments
 final List<TradingInstrument> popularInstruments = [
   TradingInstrument(
@@ -695,6 +409,7 @@ final List<TradingInstrument> popularInstruments = [
     priceColor: const Color(0xFFE53E3E),
     backgroundColor: const Color(0xFFECC94B),
     iconUrl: '',
+    icon: Icons.monetization_on,
   ),
   TradingInstrument(
     symbol: 'BNB/USDT Max',
@@ -709,6 +424,7 @@ final List<TradingInstrument> popularInstruments = [
     priceColor: const Color(0xFF38A169),
     backgroundColor: const Color(0xFF718096),
     iconUrl: '',
+    icon: Icons.ac_unit,
   ),
   TradingInstrument(
     symbol: 'SHIB/USDT',
@@ -723,6 +439,7 @@ final List<TradingInstrument> popularInstruments = [
     priceColor: const Color(0xFFE53E3E),
     backgroundColor: const Color(0xFF2D3748),
     iconUrl: '',
+    icon: Icons.person,
   ),
   TradingInstrument(
     symbol: 'SUI/USDT',
@@ -731,7 +448,6 @@ final List<TradingInstrument> popularInstruments = [
     backgroundColor: const Color(0xFF3182CE),
     iconUrl: 'https://cryptologos.cc/logos/sui-sui-logo.png',
   ),
-  // Additional Forex Pairs
   TradingInstrument(
     symbol: 'EURUSD',
     price: '1.17034',
@@ -752,249 +468,5 @@ final List<TradingInstrument> popularInstruments = [
     priceColor: const Color(0xFF38A169),
     backgroundColor: const Color(0xFF3182CE),
     iconUrl: 'https://flagcdn.com/w40/us.png',
-  ),
-  TradingInstrument(
-    symbol: 'AUDUSD',
-    price: '0.65184',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF38A169),
-    iconUrl: 'https://flagcdn.com/w40/au.png',
-  ),
-  TradingInstrument(
-    symbol: 'USDCAD',
-    price: '1.38032',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/us.png',
-  ),
-  TradingInstrument(
-    symbol: 'NZDUSD',
-    price: '0.59319',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/nz.png',
-  ),
-  // Additional Crypto
-  TradingInstrument(
-    symbol: 'SOL/USDT',
-    price: '182.260',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF9F7AEA),
-    iconUrl: 'https://cryptologos.cc/logos/solana-sol-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'XRP/USDT',
-    price: '2.98550',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ADA/USDT',
-    price: '0.456',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF2B6CB0),
-    iconUrl: 'https://cryptologos.cc/logos/cardano-ada-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'DOT/USDT',
-    price: '7.23',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://cryptologos.cc/logos/polkadot-new-dot-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'LINK/USDT',
-    price: '15.67',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2B6CB0),
-    iconUrl: 'https://cryptologos.cc/logos/chainlink-link-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'MATIC/USDT',
-    price: '0.89',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF9F7AEA),
-    iconUrl: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
-  ),
-  // Commodities
-  TradingInstrument(
-    symbol: 'USOIL',
-    price: '62.921',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'XAUUSD Max',
-    price: '3350.63',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFECC94B),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'XAGUSD',
-    price: '38.116',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'COPPER',
-    price: '3.45',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: '',
-  ),
-  // Stocks
-  TradingInstrument(
-    symbol: 'AAPL',
-    price: '231.60',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'TSLA',
-    price: '330.51',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'AMZN',
-    price: '231.00',
-    priceColor: const Color(0xFF718096),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'GOOGL',
-    price: '145.23',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'MSFT',
-    price: '456.78',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'META',
-    price: '298.45',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2B6CB0),
-    iconUrl: '',
-  ),
-  // Indices
-  TradingInstrument(
-    symbol: 'NIFTY 50',
-    price: '25008.20',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF9F7AEA),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'SENSEX',
-    price: '82345.67',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'DOW',
-    price: '38789.12',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'S&P 500',
-    price: '5123.45',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: '',
-  ),
-  TradingInstrument(
-    symbol: 'NASDAQ',
-    price: '16234.56',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: '',
-  ),
-  // More Crypto
-  TradingInstrument(
-    symbol: 'AVAX/USDT',
-    price: '45.67',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://cryptologos.cc/logos/avalanche-avax-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'UNI/USDT',
-    price: '10.613',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED64A6),
-    iconUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'ATOM/USDT',
-    price: '4.468',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF2D3748),
-    iconUrl: 'https://cryptologos.cc/logos/cosmos-atom-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'LTC/USDT',
-    price: '89.45',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF718096),
-    iconUrl: 'https://cryptologos.cc/logos/litecoin-ltc-logo.png',
-  ),
-  TradingInstrument(
-    symbol: 'BCH/USDT',
-    price: '234.56',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFED8936),
-    iconUrl: 'https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png',
-  ),
-  // More Forex
-  TradingInstrument(
-    symbol: 'EURGBP',
-    price: '0.8567',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/eu.png',
-  ),
-  TradingInstrument(
-    symbol: 'GBPCHF',
-    price: '1.2345',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://flagcdn.com/w40/gb.png',
-  ),
-  TradingInstrument(
-    symbol: 'AUDJPY',
-    price: '98.76',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFF38A169),
-    iconUrl: 'https://flagcdn.com/w40/au.png',
-  ),
-  TradingInstrument(
-    symbol: 'CADJPY',
-    price: '106.89',
-    priceColor: const Color(0xFFE53E3E),
-    backgroundColor: const Color(0xFF3182CE),
-    iconUrl: 'https://flagcdn.com/w40/ca.png',
-  ),
-  TradingInstrument(
-    symbol: 'CHFJPY',
-    price: '183.45',
-    priceColor: const Color(0xFF38A169),
-    backgroundColor: const Color(0xFFE53E3E),
-    iconUrl: 'https://flagcdn.com/w40/ch.png',
   ),
 ];

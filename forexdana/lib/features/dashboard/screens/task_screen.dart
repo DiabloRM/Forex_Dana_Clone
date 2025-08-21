@@ -26,15 +26,13 @@ class _BDCMiningAppState extends State<BDCMiningApp>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-
     return Scaffold(
       backgroundColor: const Color(0xFF00C896),
       // Updated AppBar to match the screenshot
       appBar: AppBar(
         backgroundColor: const Color(0xFF00C896),
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -208,7 +206,11 @@ class _BDCMiningAppState extends State<BDCMiningApp>
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: TabBar(
                       controller: _tabController,
-                      indicator: const BoxDecoration(),
+                      indicator: const UnderlineTabIndicator(
+                        borderSide:
+                            BorderSide(color: Color(0xFF00C896), width: 3),
+                        insets: EdgeInsets.symmetric(horizontal: 20),
+                      ),
                       labelColor: const Color(0xFF00C896),
                       unselectedLabelColor: const Color(0xFF9CA3AF),
                       labelStyle: const TextStyle(
@@ -222,22 +224,6 @@ class _BDCMiningAppState extends State<BDCMiningApp>
                       tabs: const [
                         Tab(text: 'System tasks (9)'),
                         Tab(text: 'Daily mission (4)'),
-                      ],
-                    ),
-                  ),
-                  // Active tab indicator
-                  Container(
-                    margin: const EdgeInsets.only(left: 20, top: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 3,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF00C896),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
                       ],
                     ),
                   ),

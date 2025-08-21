@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:forexdana/features/auth/screens/account_setting.dart';
 import 'package:forexdana/core/utils/security.dart';
 import 'package:forexdana/features/dashboard/screens/settings_screen.dart';
+import 'package:forexdana/features/dashboard/screens/task_screen.dart';
+import 'package:forexdana/features/dashboard/screens/demo_screen.dart';
+import 'package:forexdana/features/dashboard/screens/calculator_screen.dart';
+import 'package:forexdana/features/auth/screens/verification_screen.dart';
 import '../../../core/theme/app_theme.dart';
+import 'referral_screen.dart';
+import 'package:forexdana/features/chat/screens/customer_support.dart' as chat;
 
 class UserScreen extends StatefulWidget {
   final Function(AppThemeMode)? onThemeChanged;
@@ -171,7 +177,7 @@ class _UserScreenState extends State<UserScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const SettingsScreen(),
+                            builder: (context) => const AccountSettingScreen(),
                           ),
                         );
                       },
@@ -387,21 +393,52 @@ class _UserScreenState extends State<UserScreen> {
                         child: _buildRecommendItem(
                           Icons.assignment_turned_in_outlined,
                           'Check in',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const BDCMiningApp(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Expanded(
                         child: _buildRecommendItem(
                           Icons.card_giftcard_outlined,
                           'Referral',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const ReferralScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Expanded(
-                        child: _buildRecommendItem(Icons.trending_up, 'DEMO'),
+                        child: _buildRecommendItem(
+                          Icons.trending_up,
+                          'DEMO',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const DemoScreen(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Expanded(
                         child: _buildRecommendItem(
                           Icons.calculate_outlined,
                           'Calculator',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const CalculatorScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -413,7 +450,14 @@ class _UserScreenState extends State<UserScreen> {
                       Expanded(
                         child: _buildRecommendItem(
                           Icons.verified_user_outlined,
-                          'Verificati...',
+                          'Verification',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EmailVerificationPage(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Expanded(
@@ -455,8 +499,16 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                       Expanded(
                         child: _buildRecommendItem(
-                          Icons.headset_mic_outlined,
+                          Icons.mic_outlined,
                           'Live Chat',
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const chat.ForexDanaChatbot(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const Expanded(child: SizedBox()),
@@ -593,7 +645,7 @@ class _UserScreenState extends State<UserScreen> {
           'Calculate your potential profits.',
         );
         break;
-      case 'verificati...':
+      case 'verification':
         _showFeatureDialog(
           'Account Verification',
           'Verify your account for full access.',
