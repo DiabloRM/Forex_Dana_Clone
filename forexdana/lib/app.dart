@@ -3,6 +3,7 @@ import 'features/dashboard/screens/market_screen.dart';
 import 'features/dashboard/screens/positions_screen.dart';
 import 'features/dashboard/screens/profile_screen.dart';
 import 'features/dashboard/screens/square_screen.dart';
+import 'features/auth/screens/login_screen.dart';
 import 'core/theme/app_theme.dart';
 
 class App extends StatefulWidget {
@@ -19,6 +20,23 @@ class _AppState extends State<App> {
   int _squareTabIndex = 0;
 
   void _onItemTapped(int index) {
+    // Check if user is trying to access profile section
+    if (index == 3) {
+      // For now, we'll assume user is not logged in
+      // In a real app, you would check authentication state here
+      bool isUserLoggedIn = false; // Replace with actual auth check
+
+      if (!isUserLoggedIn) {
+        // Navigate to login screen instead of profile
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+        return; // Don't change the selected index
+      }
+    }
+
     setState(() {
       _selectedIndex = index;
       // Reset square tab index when switching to square tab
