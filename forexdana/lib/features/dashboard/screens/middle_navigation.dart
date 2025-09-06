@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/action_icon.dart';
-import '../widgets/instrument_row.dart';
 import 'user_screen.dart';
 import '../../chat/screens/customer_support.dart' as chat;
 import '../../../core/theme/app_theme.dart';
@@ -171,7 +170,7 @@ class _ExpandableAnalysisSheetState extends State<ExpandableAnalysisSheet> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -398,7 +397,7 @@ class ChartPainter extends CustomPainter {
 
     // Add some grid lines
     final gridPaint = Paint()
-      ..color = Colors.grey.withOpacity(0.3)
+      ..color = Colors.grey.withValues(alpha: 0.3)
       ..strokeWidth = 1;
 
     for (int i = 1; i < 4; i++) {

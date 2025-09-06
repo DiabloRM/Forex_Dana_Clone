@@ -7,6 +7,7 @@ import 'package:forexdana/features/dashboard/screens/demo_screen.dart';
 import 'package:forexdana/features/dashboard/screens/calculator_screen.dart';
 import 'package:forexdana/features/auth/screens/verification_screen.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/state/app_state.dart';
 import 'referral_screen.dart';
 import 'package:forexdana/features/chat/screens/customer_support.dart' as chat;
 
@@ -21,6 +22,13 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   bool _switchNetworkEnabled = false;
+  late AppState _appState;
+
+  @override
+  void initState() {
+    super.initState();
+    _appState = AppState();
+  }
 
   void _showThemeOptions(BuildContext context) {
     showModalBottomSheet(
@@ -31,15 +39,17 @@ class _UserScreenState extends State<UserScreen> {
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(20),
+          color: Theme.of(context).colorScheme.surface,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Choose Theme',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 20),
@@ -83,6 +93,16 @@ class _UserScreenState extends State<UserScreen> {
   ) {
     return InkWell(
       onTap: () {
+        // Update the app state theme mode
+        if (mode == AppThemeMode.light) {
+          _appState.setThemeMode(ThemeMode.light);
+        } else if (mode == AppThemeMode.dark) {
+          _appState.setThemeMode(ThemeMode.dark);
+        } else {
+          _appState.setThemeMode(ThemeMode.system);
+        }
+        
+        // Also call the widget callback if provided
         if (widget.onThemeChanged != null) {
           widget.onThemeChanged!(mode);
         }
@@ -91,12 +111,12 @@ class _UserScreenState extends State<UserScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: Theme.of(context).colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 24, color: Colors.grey.shade700),
+            Icon(icon, size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -104,17 +124,18 @@ class _UserScreenState extends State<UserScreen> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   ),
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade600,
-                    ),
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   ),
                 ],
               ),
@@ -122,7 +143,7 @@ class _UserScreenState extends State<UserScreen> {
             Icon(
               Icons.arrow_forward_ios,
               size: 16,
-              color: Colors.grey.shade400,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ],
         ),
@@ -133,24 +154,40 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).appBarTheme.foregroundColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.dark_mode_outlined, color: Colors.black),
-            onPressed: () {
-              _showThemeOptions(context);
+          AnimatedBuilder(
+            animation: _appState,
+            builder: (context, child) {
+              return IconButton(
+                icon: Icon(
+                  _appState.isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined, 
+                  color: Theme.of(context).appBarTheme.foregroundColor
+                ),
+                onPressed: () {
+                  // Quick toggle
+                  _appState.toggleTheme();
+                  if (widget.onThemeChanged != null) {
+                    widget.onThemeChanged!(_appState.isDarkMode ? AppThemeMode.dark : AppThemeMode.light);
+                  }
+                },
+                onLongPress: () {
+                  // Show theme options on long press
+                  _showThemeOptions(context);
+                },
+                tooltip: 'Toggle Theme',
+              );
             },
-            tooltip: 'Change Theme',
           ),
           IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.black),
+            icon: Icon(Icons.settings_outlined, color: Theme.of(context).appBarTheme.foregroundColor),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -167,7 +204,7 @@ class _UserScreenState extends State<UserScreen> {
           children: [
             // Profile Header Section
             Container(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
@@ -188,13 +225,13 @@ class _UserScreenState extends State<UserScreen> {
                             width: 60,
                             height: 60,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
+                              color: Theme.of(context).colorScheme.surfaceVariant,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.person,
                               size: 30,
-                              color: Colors.grey,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(width: 16),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forexdana/features/auth/screens/login_screen.dart';
+import 'package:forexdana/features/chat/screens/customer_support.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import for SvgPicture
 
 class RegisterScreen extends StatefulWidget {
@@ -61,7 +62,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ForexDanaChatbot()),
+              );
+            },
             icon: const Icon(Icons.headset_mic_outlined, color: Colors.black54),
             tooltip: 'Support',
           ),
@@ -103,6 +110,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontSize: 16,
                         color: green,
                         fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    width: 100,
+                    height: 80,
+                    child: Image.asset(
+                      'assets/login_img.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ],
               ),
@@ -253,7 +268,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Colors.white,
                     borderColor: greyBorder,
                     child: SvgPicture.asset(
-                      // Use 'child' here
                       'assets/Google_Symbol_0.svg',
                       height: 24,
                       width: 24,
@@ -265,9 +279,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     context: context,
                     color: Colors.white,
                     borderColor: greyBorder,
-                    child: const Icon(Icons.facebook, // Use 'child' here
-                        color: Color(0xFF1877F2),
-                        size: 28),
+                    child: const Icon(Icons.facebook,
+                        color: Color(0xFF1877F2), size: 28),
                     onTap: () {},
                   ),
                 ],
@@ -347,7 +360,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required BuildContext context,
     required Color color,
     required Color borderColor,
-    required Widget child, // Changed parameter name to 'child'
+    required Widget child,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -362,7 +375,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           border: Border.all(color: borderColor),
         ),
         alignment: Alignment.center,
-        child: child, // Use 'child' here
+        child: child,
       ),
     );
   }

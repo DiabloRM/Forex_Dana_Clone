@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
+import '../../auth/services/auth_service.dart';
 import 'overview_screen.dart';
 import 'savings_acc_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await AuthService.instance.signOut();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Signed out successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error signing out: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF5B665B),
+        elevation: 0,
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () => _signOut(context),
+            tooltip: 'Sign Out',
+          ),
+        ],
+      ),
       body: DefaultTabController(
         length: 3,
         child: Column(
@@ -16,12 +55,11 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Container(
               color: const Color(0xFF5B665B),
-              padding: const EdgeInsets.only(top: 40),
               child: TabBar(
                 indicatorColor: Colors.white,
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.white70,
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

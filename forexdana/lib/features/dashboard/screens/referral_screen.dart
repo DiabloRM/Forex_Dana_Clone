@@ -40,6 +40,7 @@ class ReferralScreen extends StatelessWidget {
               title: 'Partner with Us. Earn Big!',
               subtitle: '\$10/Lot Commission',
               buttonText: 'Join Now',
+              imageAsset: 'assets/ref_1.png.jpeg',
               icon: Icons.business,
             ),
             const SizedBox(height: 16),
@@ -48,6 +49,7 @@ class ReferralScreen extends StatelessWidget {
               title: 'Invite. Trade. Earn.',
               subtitle: '\$1000 Reward Waiting For You',
               buttonText: 'Invite Friends Now',
+              imageAsset: 'assets/ref_2.jpg',
               icon: Icons.monetization_on,
             ),
             const SizedBox(height: 16),
@@ -56,6 +58,7 @@ class ReferralScreen extends StatelessWidget {
               title: 'Invite & Get Free Crypto',
               subtitle: '1000 BDC For Every Referral',
               buttonText: 'Invite Friends Now',
+              imageAsset: 'assets/ref_3.jpg',
               icon: Icons.currency_bitcoin,
             ),
           ],
@@ -216,6 +219,7 @@ class ReferralScreen extends StatelessWidget {
     required String subtitle,
     required String buttonText,
     required IconData icon,
+    String? imageAsset,
   }) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -273,13 +277,26 @@ class ReferralScreen extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withOpacity(0.06),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 30,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: imageAsset != null
+                  ? Image.asset(
+                      imageAsset,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        icon,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    )
+                  : Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 30,
+                    ),
             ),
           ),
         ],

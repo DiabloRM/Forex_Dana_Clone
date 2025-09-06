@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "417111494426",
+    "project_id": "flutterdana-login",
+    "storage_bucket": "flutterdana-login.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417111494426:android:896dcec8de219e3935a6a3",
+        "android_client_info": {
+          "package_name": "com.example.forexdana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417111494426-c9jajctvjb2pv4qvilmqdn4e3d5re0o9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEqjSKlpYYT-_ZIU5kSG4zgqtj1bgC4zY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417111494426-c9jajctvjb2pv4qvilmqdn4e3d5re0o9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

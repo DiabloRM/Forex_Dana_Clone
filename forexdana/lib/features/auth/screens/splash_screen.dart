@@ -117,7 +117,7 @@ class _ForexDanaSplashScreenState extends State<ForexDanaSplashScreen>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
@@ -160,7 +160,8 @@ class _ForexDanaSplashScreenState extends State<ForexDanaSplashScreen>
                                   borderRadius: BorderRadius.circular(20),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.2),
                                       blurRadius: 20,
                                       offset: const Offset(0, 10),
                                     ),
@@ -244,7 +245,7 @@ class _ForexDanaSplashScreenState extends State<ForexDanaSplashScreen>
                           width: 200,
                           height: 4,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(2),
                           ),
                           child: ClipRRect(

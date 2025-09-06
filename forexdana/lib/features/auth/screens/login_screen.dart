@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forexdana/features/auth/screens/register_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:forexdana/features/auth/services/auth_service.dart';
+import 'package:forexdana/features/auth/screens/manual_login_screen.dart';
+import 'package:forexdana/core/navigation/navigation_service.dart';
+// AppRoutes is defined in navigation_service.dart, no need for separate import
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -70,12 +75,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      extendBodyBehindAppBar: false,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        systemOverlayStyle: Theme.of(context).brightness == Brightness.dark 
+            ? SystemUiOverlayStyle.light 
+            : SystemUiOverlayStyle.dark,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onBackground),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -86,19 +95,19 @@ class _LoginPageState extends State<LoginPage> {
               margin: const EdgeInsets.only(right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Theme.of(context).colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.language, color: Colors.black, size: 20),
+                  Icon(Icons.language, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
                   const SizedBox(width: 6),
                   Text(_selectedLanguage,
-                      style: const TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
                   const SizedBox(width: 4),
-                  const Icon(Icons.keyboard_arrow_down,
-                      color: Colors.black, size: 20),
+                  Icon(Icons.keyboard_arrow_down,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
                 ],
               ),
             ),
@@ -112,190 +121,12 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 40),
 
-              // 3D Illustration
+              // Login Image
               Container(
                 height: 200,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Background elements
-                    Positioned(
-                      top: 20,
-                      left: 50,
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: Colors.green[300]!.withOpacity(0.6),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 60,
-                      right: 40,
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                          color: Colors.green[400],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 40,
-                      left: 40,
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: Colors.green[500],
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      right: 60,
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: Colors.green[300],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-
-                    // Main box with money
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          // Box face
-                          Container(
-                            width: 120,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.green[200],
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '\$',
-                                style: TextStyle(
-                                  color: Colors.green[700],
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // Money bills coming out
-                          Positioned(
-                            top: -10,
-                            left: 20,
-                            child: Transform.rotate(
-                              angle: -0.2,
-                              child: Container(
-                                width: 80,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.green[400],
-                                  borderRadius: BorderRadius.circular(4),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // Coins
-                          Positioned(
-                            top: -5,
-                            right: 10,
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.amber[400],
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '\$',
-                                  style: TextStyle(
-                                    color: Colors.amber[800],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          Positioned(
-                            top: 10,
-                            left: -10,
-                            child: Container(
-                              width: 25,
-                              height: 25,
-                              decoration: BoxDecoration(
-                                color: Colors.amber[300],
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 3,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '\$',
-                                  style: TextStyle(
-                                    color: Colors.amber[800],
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Image.asset(
+                  'assets/login_img.png',
+                  fit: BoxFit.contain,
                 ),
               ),
 
@@ -344,16 +175,76 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle Google login
+                      onPressed: () async {
+                        try {
+                          // Show loading indicator
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Signing in with Google...'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                          
+                          final user =
+                              await AuthService.instance.signInWithGoogle();
+                          if (!mounted) return;
+                          
+                          if (user == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Google sign-in failed or cancelled'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Welcome, ${user.displayName ?? user.email}!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            
+                            // Add a small delay before navigation to ensure app state is updated
+                            await Future.delayed(const Duration(milliseconds: 300));
+                            
+                            if (!mounted) return;
+                            // Navigate back to main app - the app state will handle profile navigation
+                            // Check if we can pop or need to use NavigationService
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            } else {
+                              // If there's no route to pop to, use NavigationService to navigate to main
+                              try {
+                                NavigationService().navigateToAndClear(AppRoutes.main);
+                              } catch (e) {
+                                debugPrint('Error navigating after Google login: $e');
+                                // Fallback navigation if the above fails
+                                NavigationService().navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                                  AppRoutes.main,
+                                  (route) => false,
+                                );
+                              }
+                            }
+                          }
+                        } catch (e) {
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Authentication error: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        foregroundColor: Theme.of(context).colorScheme.onSurface,
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Colors.grey[300]!),
+                          side: BorderSide(color: Theme.of(context).colorScheme.outline),
                         ),
                       ),
                       child: Row(
@@ -380,13 +271,73 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 16),
 
-                  // Facebook login
+                  // Facebook login - FIXED COLOR
                   Container(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle Facebook login
+                      onPressed: () async {
+                        try {
+                          // Show loading indicator
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Signing in with Facebook...'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                          
+                          final user =
+                              await AuthService.instance.signInWithFacebook();
+                          if (!mounted) return;
+                          
+                          if (user == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Facebook sign-in failed or cancelled'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          } else {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Welcome, ${user.displayName ?? user.email}!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            
+                            // Add a small delay before navigation to ensure app state is updated
+                            await Future.delayed(const Duration(milliseconds: 300));
+                            
+                            if (!mounted) return;
+                            // Navigate back to main app - the app state will handle profile navigation
+                            // Check if we can pop or need to use NavigationService
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            } else {
+                              // If there's no route to pop to, use NavigationService to navigate to main
+                              try {
+                                NavigationService().navigateToAndClear(AppRoutes.main);
+                              } catch (e) {
+                                debugPrint('Error navigating after Facebook login: $e');
+                                // Fallback navigation if the above fails
+                                NavigationService().navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                                  AppRoutes.main,
+                                  (route) => false,
+                                );
+                              }
+                            }
+                          }
+                        } catch (e) {
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Authentication error: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -400,24 +351,16 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Facebook Logo - Fallback to simple container if SVG doesn't work
-                          Container(
-                            width: 24,
+                          // Facebook Logo PNG (prefer PNG over SVG here)
+                          Image.asset(
+                            'assets/Facebook_Symbol_1.png',
                             height: 24,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF1877F2), // Facebook blue
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'f',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'serif',
-                                ),
-                              ),
+                            width: 24,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(
+                              Icons.facebook,
+                              color: Color(0xFF1877F2),
+                              size: 24,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -453,7 +396,12 @@ class _LoginPageState extends State<LoginPage> {
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () {
-                              // Handle phone login
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const ManualLoginScreen(
+                                      initialTab: ManualLoginTab.phone),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -498,7 +446,12 @@ class _LoginPageState extends State<LoginPage> {
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () {
-                              // Handle email login
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const ManualLoginScreen(
+                                      initialTab: ManualLoginTab.email),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
