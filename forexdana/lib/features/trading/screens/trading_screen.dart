@@ -157,9 +157,9 @@ class _TradingScreenState extends State<TradingScreen> {
             // Show loading state
             if (tp.loading && tp.candles.isEmpty) {
               return const Center(
-                child: Column(
+                  child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                    children: [
                     CircularProgressIndicator(),
                     SizedBox(height: 16),
                     Text(
@@ -172,23 +172,23 @@ class _TradingScreenState extends State<TradingScreen> {
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ],
-                ),
-              );
-            }
+      ),
+    );
+  }
 
             // Show error state
             if (tp.error != null && tp.candles.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+            children: [
                     Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                     const SizedBox(height: 16),
                     const Text(
                       'Error loading trading data',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+              ),
                     const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -204,11 +204,11 @@ class _TradingScreenState extends State<TradingScreen> {
                           symbol: _symbol,
                           interval: _tfMap[selectedTimeframe] ?? '5min'),
                       child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              );
-            }
+              ),
+            ],
+          ),
+    );
+  }
 
             return Stack(
               children: [
@@ -222,7 +222,7 @@ class _TradingScreenState extends State<TradingScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 16),
-                            decoration: BoxDecoration(
+      decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
@@ -232,60 +232,60 @@ class _TradingScreenState extends State<TradingScreen> {
                                   offset: const Offset(0, 2),
                                 ),
                               ],
-                            ),
+        ),
                             margin: const EdgeInsets.all(16),
-                            child: Row(
+      child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
+        children: [
+          Expanded(
+            child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
+              children: [
                                       Text(
                                         t != null
                                             ? t.lastPrice.toStringAsFixed(5)
                                             : '--',
-                                        style: TextStyle(
-                                          fontSize: 32,
+                      style: TextStyle(
+                        fontSize: 32,
                                           fontWeight: FontWeight.w500,
-                                          color: priceColor,
-                                        ),
-                                      ),
+                        color: priceColor,
+                      ),
+                ),
                                       const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text(
+                Row(
+                  children: [
+                          Text(
                                             t != null
                                                 ? '${t.priceChangePercent.toStringAsFixed(2)}%'
                                                 : '--',
-                                            style: TextStyle(
-                                              color: priceColor,
+                            style: TextStyle(
+                              color: priceColor,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                            ),
+                          ),
                                           const SizedBox(width: 12),
-                                          Text(
+                          Text(
                                             t != null
                                                 ? t.priceChange
                                                     .toStringAsFixed(5)
                                                 : '--',
-                                            style: TextStyle(
+                            style: TextStyle(
                                               color: priceColor,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
+                            ),
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
                                     Row(
                                       children: [
                                         AppIcons.getIcon(
@@ -306,22 +306,22 @@ class _TradingScreenState extends State<TradingScreen> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
+      children: [
+        Text(
                                           'H: ${t != null ? t.highPrice.toStringAsFixed(5) : '--'}',
-                                          style: TextStyle(
+          style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey.shade600),
-                                        ),
-                                        Text(
+        ),
+        Text(
                                           'L: ${t != null ? t.lowPrice.toStringAsFixed(5) : '--'}',
-                                          style: TextStyle(
+          style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey.shade600),
-                                        ),
+          ),
                                       ],
-                                    ),
-                                  ],
+        ),
+      ],
                                 ),
                               ],
                             ),
@@ -332,32 +332,32 @@ class _TradingScreenState extends State<TradingScreen> {
                             height: 50,
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: timeframes.length,
-                              itemBuilder: (context, index) {
-                                String timeframe = timeframes[index];
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: timeframes.length,
+        itemBuilder: (context, index) {
+          String timeframe = timeframes[index];
                                 bool isSelected =
                                     timeframe == selectedTimeframe;
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedTimeframe = timeframe;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedTimeframe = timeframe;
                                       _resetZoom(); // Reset zoom when timeframe changes
-                                    });
-                                    final mapped = _tfMap[timeframe] ?? '5min';
+              });
+              final mapped = _tfMap[timeframe] ?? '5min';
                                     context.read<TradingProvider>().loadAll(
                                         symbol: _symbol, interval: mapped);
-                                  },
-                                  child: Container(
+            },
+            child: Container(
                                     margin: const EdgeInsets.only(right: 16),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
+              decoration: BoxDecoration(
+                color: isSelected
                                           ? Colors.blue.shade100
-                                          : Colors.transparent,
+                    : Colors.transparent,
                                       borderRadius: BorderRadius.circular(20),
                                       border: isSelected
                                           ? Border.all(
@@ -367,22 +367,22 @@ class _TradingScreenState extends State<TradingScreen> {
                                               color: Colors.grey.shade300,
                                               width: 1),
                                     ),
-                                    child: Text(
-                                      timeframe,
-                                      style: TextStyle(
-                                        color: isSelected
+                child: Text(
+                  timeframe,
+                  style: TextStyle(
+                    color: isSelected
                                             ? Colors.blue.shade700
                                             : Colors.grey.shade600,
                                         fontSize: 14,
                                         fontWeight: isSelected
                                             ? FontWeight.w600
                                             : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
                           ),
 
                           // Indicators Row
@@ -394,7 +394,7 @@ class _TradingScreenState extends State<TradingScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
+      decoration: BoxDecoration(
                                     border: Border.all(color: Colors.orange),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -416,18 +416,18 @@ class _TradingScreenState extends State<TradingScreen> {
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     physics: const BouncingScrollPhysics(),
-                                    child: Row(
-                                      children: [
+      child: Row(
+        children: [
                                         _buildIndicatorText(
                                             'MA5',
                                             _lastValue(tp.ma5),
                                             Colors.purple.shade300),
-                                        const SizedBox(width: 16),
+          const SizedBox(width: 16),
                                         _buildIndicatorText(
                                             'MA10',
                                             _lastValue(tp.ma10),
                                             Colors.blue.shade300),
-                                        const SizedBox(width: 16),
+          const SizedBox(width: 16),
                                         _buildIndicatorText(
                                             'MA30',
                                             _lastValue(tp.ma30),
@@ -441,7 +441,7 @@ class _TradingScreenState extends State<TradingScreen> {
                                                 : '--',
                                             Colors.grey.shade600),
                                       ],
-                                    ),
+                ),
                                   ),
                                 ),
                               ],
@@ -451,23 +451,23 @@ class _TradingScreenState extends State<TradingScreen> {
                           // Chart Controls
                           Container(
                             margin: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
+              child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
+                children: [
+                  Text(
                                   'Chart (${_chartZoom.toStringAsFixed(1)}x)',
-                                  style: TextStyle(
+                    style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey.shade700,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
+            ),
+          ),
+          Row(
+            children: [
                                     AppIcons.getIconButton(
                                       AppIcons.zoomOut,
                                       onPressed: _zoomOut,
-                                      color: _chartZoom > 1.0
+                    color: _chartZoom > 1.0
                                           ? Colors.blue
                                           : Colors.grey,
                                       size: AppIcons.sizeMedium,
@@ -476,85 +476,85 @@ class _TradingScreenState extends State<TradingScreen> {
                                     AppIcons.getIconButton(
                                       AppIcons.zoomIn,
                                       onPressed: _zoomIn,
-                                      color: _chartZoom < 5.0
+                    color: _chartZoom < 5.0
                                           ? Colors.blue
                                           : Colors.grey,
                                       size: AppIcons.sizeMedium,
                                       tooltip: 'Zoom in',
-                                    ),
-                                    if (_isZoomed)
+              ),
+              if (_isZoomed)
                                       AppIcons.getIconButton(
                                         AppIcons.refresh,
-                                        onPressed: _resetZoom,
+                  onPressed: _resetZoom,
                                         color: Colors.orange,
                                         size: AppIcons.sizeMedium,
                                         tooltip: 'Reset zoom',
-                                      ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                ),
+            ],
+          ),
+        ],
+      ),
                           ),
 
                           // Chart Area
                           Container(
                             height: 300,
                             margin: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
+              decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
                                   color: Colors.grey.shade200,
                                   blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: tp.candles.isNotEmpty
-                                ? InteractiveViewer(
-                                    minScale: 0.5,
-                                    maxScale: 3.0,
-                                    child: CandlestickChart(
-                                      candles: tp.candles,
-                                      ma5: tp.ma5,
-                                      ma10: tp.ma10,
-                                      ma30: tp.ma30,
-                                      zoom: _chartZoom,
-                                      offset: _chartOffset,
-                                    ),
-                                  )
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+                child: tp.candles.isNotEmpty
+                    ? InteractiveViewer(
+                        minScale: 0.5,
+                        maxScale: 3.0,
+                        child: CandlestickChart(
+                          candles: tp.candles,
+                          ma5: tp.ma5,
+                          ma10: tp.ma10,
+                          ma30: tp.ma30,
+                          zoom: _chartZoom,
+                          offset: _chartOffset,
+                        ),
+                      )
                                 : const Center(
-                                    child: Text(
-                                      'No chart data available',
+                        child: Text(
+                          'No chart data available',
                                       style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                          ),
+                        ),
+                      ),
+              ),
 
                           // MACD Indicator
-                          if (tp.macd.isNotEmpty && tp.signal.isNotEmpty)
-                            Container(
+          if (tp.macd.isNotEmpty && tp.signal.isNotEmpty)
+            Container(
                               height: 120,
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
+              decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.shade200,
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
-                                  ),
+              ),
                                 ],
                               ),
-                              child: MacdChart(
-                                macd: tp.macd,
-                                signal: tp.signal,
-                                hist: tp.hist,
-                              ),
-                            ),
+                child: MacdChart(
+                  macd: tp.macd,
+                  signal: tp.signal,
+                  hist: tp.hist,
+                ),
+              ),
 
                           // Time labels
                           Container(
@@ -584,15 +584,15 @@ class _TradingScreenState extends State<TradingScreen> {
                                         fontSize: 10,
                                         color: Colors.grey.shade600)),
                               ],
-                            ),
-                          ),
+              ),
+            ),
 
                           // Bottom Action Buttons
                           Container(
                             padding: const EdgeInsets.all(16),
                             child: Row(
-                              children: [
-                                Expanded(
+      children: [
+        Expanded(
                                   child: Column(
                                     children: [
                                       AppIcons.getIcon(AppIcons.positions,
@@ -608,19 +608,19 @@ class _TradingScreenState extends State<TradingScreen> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    children: [
+              children: [
                                       AppIcons.getIcon(AppIcons.time,
                                           color: Colors.grey.shade600,
                                           size: AppIcons.sizeMedium),
                                       const SizedBox(height: 4),
                                       Text('Pending...',
-                                          style: TextStyle(
+                      style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey.shade600)),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
+              ],
+            ),
+          ),
+        Expanded(
                                   flex: 2,
                                   child: Container(
                                     height: 48,
@@ -629,63 +629,63 @@ class _TradingScreenState extends State<TradingScreen> {
                                     decoration: BoxDecoration(
                                       color: Colors.green.shade600,
                                       borderRadius: BorderRadius.circular(24),
-                                    ),
+              ),
                                     child: const Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: [
+              children: [
                                           Text('BUY',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
                                                   fontWeight: FontWeight.w600)),
                                           Text('Market',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
+                  ],
+                ),
+            ),
+          ),
+        ),
+            Expanded(
                                   flex: 2,
-                                  child: Container(
+              child: Container(
                                     height: 48,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 4),
-                                    decoration: BoxDecoration(
+                decoration: BoxDecoration(
                                       color: Colors.red.shade600,
                                       borderRadius: BorderRadius.circular(24),
-                                    ),
+                ),
                                     child: const Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: [
+                  children: [
                                           Text('SELL',
-                                              style: TextStyle(
+                      style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600)),
                                           Text('Market',
-                                              style: TextStyle(
+                        style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12)),
                                         ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      ),
+                    ),
                       ),
                     ),
                   ],
                 ),
+              ),
+                        ],
+            ),
+            ),
+          ],
+        ),
                 // Loading overlay when refreshing
                 Consumer<TradingProvider>(
                   builder: (context, tp, _) {
@@ -693,24 +693,24 @@ class _TradingScreenState extends State<TradingScreen> {
                       return Container(
                         color: Colors.black.withValues(alpha: 0.3),
                         child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
                               CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
+          ),
                               SizedBox(height: 16),
-                              Text(
+          Text(
                                 'Refreshing data...',
-                                style: TextStyle(
+            style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+            ),
+          ),
+        ],
+      ),
                         ),
                       );
                     }
@@ -728,17 +728,17 @@ class _TradingScreenState extends State<TradingScreen> {
   Widget _buildIndicatorText(String label, String value, Color color) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
+          children: [
+            Text(
           '$label: ',
-          style: TextStyle(
+              style: TextStyle(
               color: color, fontSize: 12, fontWeight: FontWeight.w500),
-        ),
+              ),
         Text(
           value,
           style: TextStyle(color: color, fontSize: 12),
-        ),
-      ],
+            ),
+          ],
     );
   }
 }
@@ -798,7 +798,7 @@ class CandlestickPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (candles.isEmpty) return;
 
-    final paint = Paint()..strokeWidth = 1;
+  final paint = Paint()..strokeWidth = 1;
 
     final minPrice = candles.map((c) => c.low).reduce((a, b) => a < b ? a : b);
     final maxPrice = candles.map((c) => c.high).reduce((a, b) => a > b ? a : b);
@@ -844,7 +844,7 @@ class CandlestickPainter extends CustomPainter {
           x - bodyWidth / 2, bodyTop, x + bodyWidth / 2, bodyBottom);
       paint.style = isBullish ? PaintingStyle.stroke : PaintingStyle.fill;
       canvas.drawRect(rect, paint);
-    }
+  }
 
     // Draw moving averages
     void drawMA(List<double>? series, Color color) {

@@ -34,6 +34,7 @@ dev_dependencies:
 
   # Packages for development and code analysis
   flutter_lints: ^6.0.0 # Adjusted to a stable, common version
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -49,6 +50,14 @@ flutter:
     - assets/ref_3.jpg
     - assets/market_1.jpeg
     - assets/market_2.jpeg
+    - assets/images.jpeg
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images.jpeg"
+  adaptive_icon_background: "#FFFFFF"
+  remove_alpha_ios: true
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
