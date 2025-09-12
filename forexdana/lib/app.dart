@@ -166,9 +166,9 @@ class _AppState extends State<App> {
             builder: (context, child) {
               return BottomNavigationBar(
                 currentIndex: _appState.currentBottomNavIndex,
-                selectedItemColor: Theme.of(context).colorScheme.onSurface,
-                unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-                backgroundColor: Theme.of(context).colorScheme.surface,
+                selectedItemColor: Colors.black,
+                unselectedItemColor: Colors.grey,
+                backgroundColor: Colors.white,
                 type: BottomNavigationBarType.fixed,
                 onTap: _onItemTapped,
                 items: const [

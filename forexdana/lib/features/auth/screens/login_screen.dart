@@ -76,15 +76,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: false,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        systemOverlayStyle: Theme.of(context).brightness == Brightness.dark 
-            ? SystemUiOverlayStyle.light 
-            : SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onBackground),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -95,19 +93,19 @@ class _LoginPageState extends State<LoginPage> {
               margin: const EdgeInsets.only(right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.language, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
+                  const Icon(Icons.language, color: Colors.black, size: 20),
                   const SizedBox(width: 6),
                   Text(_selectedLanguage,
-                      style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                      style: const TextStyle(color: Colors.black)),
                   const SizedBox(width: 4),
-                  Icon(Icons.keyboard_arrow_down,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant, size: 20),
+                  const Icon(Icons.keyboard_arrow_down,
+                      color: Colors.black, size: 20),
                 ],
               ),
             ),
@@ -239,12 +237,12 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        foregroundColor: Theme.of(context).colorScheme.onSurface,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: Theme.of(context).colorScheme.outline),
+                          side: BorderSide(color: Colors.grey[300]!),
                         ),
                       ),
                       child: Row(

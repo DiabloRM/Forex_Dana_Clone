@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/navigation_service.dart';
 
 /// Global app state management
 class AppState extends ChangeNotifier {
   static final AppState _instance = AppState._internal();
   factory AppState() => _instance;
-  AppState._internal() {
-    // Load saved theme preference
-    _loadThemePreference();
-  }
+  AppState._internal();
 
   // Navigation state
   int _currentBottomNavIndex = 0;
@@ -25,9 +21,6 @@ class AppState extends ChangeNotifier {
   // Theme state
   ThemeMode _themeMode = ThemeMode.system;
   bool _isDarkMode = false;
-  
-  // Theme persistence keys
-  static const String _themePreferenceKey = 'theme_mode';
 
   // Market state
   String _selectedMarketCategory = 'Recommend';
@@ -120,67 +113,12 @@ class AppState extends ChangeNotifier {
     if (_themeMode != mode) {
       _themeMode = mode;
       _isDarkMode = mode == ThemeMode.dark;
-      _saveThemePreference(mode);
       notifyListeners();
     }
   }
 
   void toggleTheme() {
     setThemeMode(_isDarkMode ? ThemeMode.light : ThemeMode.dark);
-  }
-  
-  // Theme persistence methods
-  Future<void> _saveThemePreference(ThemeMode mode) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      String themeModeString;
-      
-      switch (mode) {
-        case ThemeMode.light:
-          themeModeString = 'light';
-          break;
-        case ThemeMode.dark:
-          themeModeString = 'dark';
-          break;
-        default:
-          themeModeString = 'system';
-      }
-      
-      await prefs.setString(_themePreferenceKey, themeModeString);
-    } catch (e) {
-      debugPrint('Error saving theme preference: $e');
-    }
-  }
-  
-  Future<void> _loadThemePreference() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final themeModeString = prefs.getString(_themePreferenceKey);
-      
-      if (themeModeString != null) {
-        ThemeMode mode;
-        
-        switch (themeModeString) {
-          case 'light':
-            mode = ThemeMode.light;
-            break;
-          case 'dark':
-            mode = ThemeMode.dark;
-            break;
-          default:
-            mode = ThemeMode.system;
-        }
-        
-        // Update theme mode without saving preference again
-        if (_themeMode != mode) {
-          _themeMode = mode;
-          _isDarkMode = mode == ThemeMode.dark;
-          notifyListeners();
-        }
-      }
-    } catch (e) {
-      debugPrint('Error loading theme preference: $e');
-    }
   }
 
   // Market methods
@@ -259,7 +197,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Other state persistence methods (for future implementation)
+  // State persistence methods (for future implementation)
   Map<String, dynamic> toJson() {
     return {
       'currentBottomNavIndex': _currentBottomNavIndex,

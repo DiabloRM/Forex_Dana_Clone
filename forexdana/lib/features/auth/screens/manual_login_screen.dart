@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:forexdana/features/auth/services/auth_service.dart';
 import 'package:forexdana/core/navigation/navigation_service.dart';
+import 'package:forexdana/features/auth/screens/register_screen.dart';
 
 enum ManualLoginTab { email, phone }
 
@@ -295,22 +296,32 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
             const SizedBox(height: 16),
             // Register link
             Center(
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                  children: [
-                    const TextSpan(text: "Don't have an account? "),
-                    TextSpan(
-                      text: 'Register',
-                      style: TextStyle(
-                        color: Colors.blue.shade600,
-                        fontWeight: FontWeight.w500,
-                      ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(4),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const RegisterScreen(),
                     ),
-                  ],
+                  );
+                },
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                    children: [
+                      const TextSpan(text: "Don't have an account? "),
+                      TextSpan(
+                        text: 'Register',
+                        style: TextStyle(
+                          color: Colors.blue.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -574,22 +585,32 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
             const SizedBox(height: 16),
             // Register link
             Center(
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                  children: [
-                    const TextSpan(text: "Don't have an account? "),
-                    TextSpan(
-                      text: 'Register',
-                      style: TextStyle(
-                        color: Colors.blue.shade600,
-                        fontWeight: FontWeight.w500,
-                      ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(4),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const RegisterScreen(),
                     ),
-                  ],
+                  );
+                },
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                    children: [
+                      const TextSpan(text: "Don't have an account? "),
+                      TextSpan(
+                        text: 'Register',
+                        style: TextStyle(
+                          color: Colors.blue.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

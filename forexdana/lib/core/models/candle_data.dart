@@ -28,4 +28,7 @@ class CandleData {
       timestamp: ts,
     );
   }
+
+  int get time => timestamp;
+  DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(timestamp);
 }
