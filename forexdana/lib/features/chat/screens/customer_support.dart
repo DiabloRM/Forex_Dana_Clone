@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+const String geminiApiKey = 'AIzaSyA5GPciGlBck2Zasil0P3wrDNsED3V0STc';
+const String geminiApiUrl =
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 class ForexDanaChatbot extends StatefulWidget {
   const ForexDanaChatbot({super.key});
@@ -50,6 +56,8 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
   @override
   void dispose() {
     _animationController.dispose();
+    _messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -106,15 +114,32 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
     _sendMessage(topic);
   }
 
-  void _simulateBotResponse(String userMessage) {
-    Future.delayed(const Duration(milliseconds: 1500), () {
+  void _simulateBotResponse(String userMessage) async {
+    try {
+      final geminiResponse = await _fetchGeminiResponse(userMessage);
       _hideTypingIndicator();
-
-      String response = _getBotResponse(userMessage);
       setState(() {
         _messages.add(
           ChatMessage(
-            message: response,
+            message: geminiResponse ?? _getBotResponse(userMessage),
+            isBot: true,
+            timestamp: DateTime.now(),
+            messageType: MessageType.bot,
+            // Only show topics if the Gemini API didn't provide a response
+            // and the user message triggers a topic, or if it's the welcome message.
+            showTopics:
+                geminiResponse == null ? _shouldShowTopics(userMessage) : false,
+          ),
+        );
+      });
+      _scrollToBottom();
+    } catch (e) {
+      _hideTypingIndicator();
+      setState(() {
+        _messages.add(
+          ChatMessage(
+            message:
+                'Sorry, I could not get a response from AI. Please try again later. ($e)', // Added error for debugging
             isBot: true,
             timestamp: DateTime.now(),
             messageType: MessageType.bot,
@@ -123,33 +148,106 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
         );
       });
       _scrollToBottom();
-    });
+    }
+  }
+
+  Future<String?> _fetchGeminiResponse(String prompt) async {
+    // Only attempt to call Gemini if an API key is provided
+    if (geminiApiKey == 'YOUR_GEMINI_API_KEY' || geminiApiKey.isEmpty) {
+      debugPrint("Gemini API Key is not set. Skipping API call.");
+      return null; // Return null to fall back to _getBotResponse
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('$geminiApiUrl?key=$geminiApiKey'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "contents": [
+            {
+              "parts": [
+                {"text": prompt}
+              ]
+            }
+          ]
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final candidates = data['candidates'];
+        if (candidates != null && candidates.isNotEmpty) {
+          final parts = candidates[0]['content']['parts'];
+          if (parts != null && parts.isNotEmpty) {
+            return parts[0]['text'] as String?;
+          }
+        }
+      } else {
+        debugPrint(
+            'Gemini API Error: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('Error fetching Gemini response: $e');
+    }
+    return null;
   }
 
   bool _shouldShowTopics(String userMessage) {
     String lowerMessage = userMessage.toLowerCase();
+    // Show topics if the message contains any of these keywords
+    // or if it's the initial welcome message from the bot
     return lowerMessage.contains('beginner') ||
         lowerMessage.contains('verification') ||
         lowerMessage.contains('withdrawal') ||
-        lowerMessage.contains('bdc events');
+        lowerMessage.contains('bdc events') ||
+        lowerMessage.contains('forex trading') ||
+        lowerMessage.contains('what is forex') ||
+        lowerMessage.contains('stock trading') ||
+        lowerMessage.contains('what are stocks') ||
+        lowerMessage.contains('leverage') ||
+        lowerMessage.contains('currency pairs') ||
+        lowerMessage.contains('market analysis') ||
+        lowerMessage.contains('technical analysis') ||
+        lowerMessage.contains('deposit methods') ||
+        lowerMessage.contains('trading platform') ||
+        lowerMessage.contains('risk management');
   }
 
   String _getBotResponse(String message) {
     String lowerMessage = message.toLowerCase();
 
     if (lowerMessage.contains('beginner')) {
-      return "Great! I'd be happy to help you get started with ForexDana. 🚀\n\nAs a beginner, here are some key things to know:\n\n• Start with our demo account to practice\n• Complete our educational modules\n• Begin with small trades\n• Always use stop losses\n\nWould you like me to guide you through account setup or explain any of these concepts in detail?";
+      return "Start with demo, modules, small trades, and stop losses. Need help with setup or concepts?";
     } else if (lowerMessage.contains('verification')) {
-      return "I can help you with account verification! 📋\n\nYou'll need:\n• Government-issued ID (passport/license)\n• Proof of address (utility bill/bank statement)\n• Bank account details\n\nThe verification process typically takes 1-2 business days.\n\nWould you like help uploading your documents or have questions about the verification process?";
+      return "You'll need ID, proof of address, and bank details. Takes 1-2 days. Upload help or questions?";
     } else if (lowerMessage.contains('withdrawal')) {
-      return "I can assist with withdrawal queries! 💰\n\nWithdrawal info:\n• Minimum withdrawal: \$50\n• Processing time: 1-3 business days\n• Available methods: Bank transfer, e-wallets\n• No withdrawal fees for verified accounts\n\nWhat specific withdrawal issue can I help with?";
+      return "Min \$50, 1-3 business days. Bank/e-wallets, no fees for verified. Specific issue?";
     } else if (lowerMessage.contains('bdc events')) {
-      return "BDC Events information! 🎯\n\n• Weekly market analysis sessions\n• Live trading workshops\n• Educational webinars\n• Q&A with trading experts\n\nNext event: 'Forex Fundamentals Workshop'\nDate: This Friday, 2:00 PM GMT\n\nWould you like to register for upcoming events or get more details?";
+      return "Weekly analysis, workshops, webinars. Next: 'Forex Fundamentals' Fri, 2 PM GMT. Register/details?";
     } else if (lowerMessage.contains('live agent') ||
         lowerMessage.contains('agen manusia')) {
-      return "I'm connecting you with a live agent now... 🔄\n\nPlease hold on while I transfer your chat. Our average wait time is 2-3 minutes.\n\nIn the meantime, you can also:\n• Email us at support@forexdana.com\n• Call +1-800-FOREX-DANA\n• WhatsApp: +1-234-567-8900\n\nIs there anything else I can help you with while you wait?";
+      return "Connecting to live agent (2-3 min wait). Email support@forexdana.com or call +1-800-FOREX-DANA.";
+    } else if (lowerMessage.contains('forex trading') ||
+        lowerMessage.contains('what is forex')) {
+      return "Forex: exchanging currencies for profit. Largest market. Terms: Pips, Lots, Leverage, Margin. Specific pairs/strategies?";
+    } else if (lowerMessage.contains('stock trading') ||
+        lowerMessage.contains('what are stocks')) {
+      return "Stock trading: buying/selling company shares. Terms: Dividends, Market Cap, IPO. Stock analysis or account setup?";
+    } else if (lowerMessage.contains('leverage')) {
+      return "Leverage: control large sums with small capital (e.g., 1:100 means \$10k with \$100). Magnifies profits/losses. Risk management with leverage?";
+    } else if (lowerMessage.contains('currency pairs')) {
+      return "Majors: EUR/USD, GBP/USD. Minors: EUR/GBP. Exotics: USD/SGD. Which pair or how to read?";
+    } else if (lowerMessage.contains('market analysis') ||
+        lowerMessage.contains('technical analysis')) {
+      return "Market analysis: Technical (charts, indicators) & Fundamental (economics, news). Specific indicators/reports?";
+    } else if (lowerMessage.contains('deposit methods')) {
+      return "Bank, cards, e-wallets, crypto. Min \$100. Which method?";
+    } else if (lowerMessage.contains('trading platform')) {
+      return "Our platform has real-time quotes, charts, tools, one-click trading. Web, mobile, or desktop?";
+    } else if (lowerMessage.contains('risk management')) {
+      return "Crucial for trading. Use Stop-Loss, risk 1-2% per trade, diversify. Learn about setting stop-loss/take-profit?";
     } else {
-      return "Thank you for your message! I understand you're asking about: \"$message\"\n\nI'm here to help with:\n• Account setup and verification\n• Trading questions\n• Withdrawal/deposit issues\n• Platform navigation\n• Educational resources\n\nCould you please provide more specific details about your question, or choose from the topics below?";
+      return "Thanks for asking about: \"$message\". I can help with account, trading, withdrawals, platform, education. More details or choose a topic?";
     }
   }
 
@@ -169,8 +267,8 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); // Go back from chat screen
               },
               child: const Text('End Chat'),
             ),
@@ -326,18 +424,17 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
   }
 
   Widget _buildDot(int index) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: Colors.grey[400],
-            shape: BoxShape.circle,
-          ),
-        );
-      },
+    // This part of the typing indicator is currently static.
+    // To make it animate, you'd need to use a TweenSequenceAnimation
+    // or similar for opacity/size changes for each dot.
+    // For now, it will just show three grey dots.
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: Colors.grey[400],
+        shape: BoxShape.circle,
+      ),
     );
   }
 
@@ -355,7 +452,7 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
                 title: const Text('Email Support'),
                 onTap: () {
                   Navigator.of(context).pop();
-                  // TODO: Implement email support
+                  // TODO: Implement email support (e.g., launch email client)
                 },
               ),
               ListTile(
@@ -363,7 +460,7 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
                 title: const Text('Call Support'),
                 onTap: () {
                   Navigator.of(context).pop();
-                  // TODO: Implement call support
+                  // TODO: Implement call support (e.g., launch dialer)
                 },
               ),
               ListTile(
@@ -371,7 +468,7 @@ class _ForexDanaChatbotState extends State<ForexDanaChatbot>
                 title: const Text('Help Center'),
                 onTap: () {
                   Navigator.of(context).pop();
-                  // TODO: Navigate to help center
+                  // TODO: Navigate to help center (e.g., launch web view)
                 },
               ),
             ],
@@ -472,9 +569,16 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine alignment based on whether it's a bot or user message
+    final alignment =
+        message.isBot ? CrossAxisAlignment.start : CrossAxisAlignment.end;
+    final rowAlignment =
+        message.isBot ? MainAxisAlignment.start : MainAxisAlignment.end;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Row(
+        mainAxisAlignment: rowAlignment,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (message.isBot) ...[
@@ -498,11 +602,9 @@ class ChatBubble extends StatelessWidget {
             ),
             const SizedBox(width: 12),
           ],
-          Expanded(
+          Flexible(
             child: Column(
-              crossAxisAlignment: message.isBot
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.end,
+              crossAxisAlignment: alignment,
               children: [
                 if (!message.isBot) ...[
                   Text(
@@ -514,9 +616,8 @@ class ChatBubble extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: message.isBot
-                        ? Colors.white
-                        : const Color(0xFF2C5F5D),
+                    color:
+                        message.isBot ? Colors.white : const Color(0xFF2C5F5D),
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
@@ -542,7 +643,9 @@ class ChatBubble extends StatelessWidget {
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
-                if (message.showTopics) ...[
+                if (message.showTopics &&
+                    message.messageType == MessageType.welcome) ...[
+                  // Only show topic buttons for the initial welcome message from the bot
                   const SizedBox(height: 12),
                   _buildTopicButtons(),
                 ],
@@ -572,6 +675,14 @@ class ChatBubble extends StatelessWidget {
       'Verification',
       'Withdrawal',
       'BDC Events',
+      'Forex Trading', // New topic
+      'Stock Trading', // New topic
+      'Leverage', // New topic
+      'Currency Pairs', // New topic
+      'Market Analysis', // New topic
+      'Deposit Methods', // New topic
+      'Trading Platform', // New topic
+      'Risk Management', // New topic
       'Live Agent/Agen manusia',
     ];
 

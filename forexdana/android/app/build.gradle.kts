@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.forexdana"
-        minSdkVersion(23) // Setting minimum SDK to Android 6.0 (Flutter requirement)
+        minSdkVersion(24) // Updated minimum SDK to Android 7.0 (required by url_launcher_android)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

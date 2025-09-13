@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../../core/network/api_client.dart';
-import '../../trading/state/trading_provider.dart';
-import '../../../core/models/ticker_data.dart';
-import '../../trading/widgets/trading_chart.dart';
+import '../../../core/network/api_client.dart'; // Assuming this path is correct
+import '../../trading/state/trading_provider.dart'; // Assuming this path is correct
+import '../../../core/models/ticker_data.dart'; // Assuming this path is correct
+import '../../trading/widgets/trading_chart.dart'; // Assuming this path is correct
 
 class TradingScreen extends StatefulWidget {
   final String? initialSymbol;
@@ -240,9 +240,9 @@ class _TradingScreenState extends State<TradingScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              Text('H: 27${t != null ? t.highPrice.toStringAsFixed(5) : '--'}',
+              Text('H: ${t != null ? t.highPrice.toStringAsFixed(5) : '--'}',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-              Text('L: 27${t != null ? t.lowPrice.toStringAsFixed(5) : '--'}',
+              Text('L: ${t != null ? t.lowPrice.toStringAsFixed(5) : '--'}',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
             ],
           ),
@@ -300,20 +300,23 @@ class _TradingScreenState extends State<TradingScreen> {
   Widget _buildIndicatorsInfo(TradingProvider tp) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Row(children: [
-          const Text("Indicators:",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.black54)),
-          const SizedBox(width: 16),
-          _buildIndicatorText(
-              'MA5', _lastValue(tp.ma5), Colors.purple.shade300),
-          const SizedBox(width: 16),
-          _buildIndicatorText(
-              'MA10', _lastValue(tp.ma10), Colors.blue.shade300),
-          const SizedBox(width: 16),
-          _buildIndicatorText(
-              'MA30', _lastValue(tp.ma30), Colors.orange.shade300),
-        ]));
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [
+            const Text("Indicators:",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.black54)),
+            const SizedBox(width: 16),
+            _buildIndicatorText(
+                'MA5', _lastValue(tp.ma5), Colors.purple.shade300),
+            const SizedBox(width: 16),
+            _buildIndicatorText(
+                'MA10', _lastValue(tp.ma10), Colors.blue.shade300),
+            const SizedBox(width: 16),
+            _buildIndicatorText(
+                'MA30', _lastValue(tp.ma30), Colors.orange.shade300),
+          ]),
+        ));
   }
 
   Widget _buildIndicatorText(String label, String value, Color color) {
@@ -327,7 +330,7 @@ class _TradingScreenState extends State<TradingScreen> {
 
   Widget _buildChart(TradingProvider tp) {
     return Container(
-      height: 450,
+      height: 400, // Reduced height a bit to fit both charts comfortably
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -377,7 +380,15 @@ class _TradingScreenState extends State<TradingScreen> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(vertical: 16)),
-      onPressed: () {},
+      onPressed: () {
+        // Handle button press, e.g., navigate to an order screen
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$title button pressed!'),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
       child: Column(
         children: [
           Text(title,

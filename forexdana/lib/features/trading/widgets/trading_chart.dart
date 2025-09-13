@@ -62,6 +62,7 @@ class _TradingChartState extends State<TradingChart> {
         dateFormat: DateFormat.Hm(),
       ),
       primaryYAxis: NumericAxis(
+        // This is the primary Y-axis for the candle stick and moving averages
         opposedPosition: true,
         labelPosition: ChartDataLabelPosition.inside,
         rangePadding: ChartRangePadding.round,
@@ -72,11 +73,19 @@ class _TradingChartState extends State<TradingChart> {
       axes: <ChartAxis>[
         NumericAxis(
           name: 'macdYAxis',
-          opposedPosition: true,
-          majorGridLines: const MajorGridLines(width: 0),
+          // This axis will be for the MACD and Histogram
+          opposedPosition:
+              false, // Explicitly false to put it on the left/bottom by default
+          majorGridLines:
+              const MajorGridLines(width: 0.5, color: Colors.black12),
           axisLine: const AxisLine(width: 0),
           majorTickLines: const MajorTickLines(size: 0),
-          isVisible: false,
+          labelPosition:
+              ChartDataLabelPosition.inside, // Adjust label position if needed
+          numberFormat: NumberFormat.compact(locale: 'en_US'),
+          // You might want to set a fixed range for MACD if it's always centered around 0
+          // minimum: widget.hist.reduce(min) * 1.2,
+          // maximum: widget.hist.reduce(max) * 1.2,
         ),
       ],
       trackballBehavior: _trackballBehavior,
@@ -107,7 +116,7 @@ class _TradingChartState extends State<TradingChart> {
         dataSource: widget.hist,
         xValueMapper: (_, index) => indexToTime(index),
         yValueMapper: (double val, _) => val,
-        yAxisName: 'macdYAxis',
+        yAxisName: 'macdYAxis', // This links it to the MACD Y-axis
         name: 'Histogram',
         pointColorMapper: (double val, _) => val >= 0
             ? Colors.green.withOpacity(0.7)
@@ -117,7 +126,7 @@ class _TradingChartState extends State<TradingChart> {
         dataSource: widget.macd,
         xValueMapper: (_, index) => indexToTime(index),
         yValueMapper: (double val, _) => val,
-        yAxisName: 'macdYAxis',
+        yAxisName: 'macdYAxis', // This links it to the MACD Y-axis
         name: 'MACD',
         color: Colors.blue,
         width: 2,
@@ -126,7 +135,7 @@ class _TradingChartState extends State<TradingChart> {
         dataSource: widget.signal,
         xValueMapper: (_, index) => indexToTime(index),
         yValueMapper: (double val, _) => val,
-        yAxisName: 'macdYAxis',
+        yAxisName: 'macdYAxis', // This links it to the MACD Y-axis
         name: 'Signal',
         color: Colors.purpleAccent,
         width: 2,

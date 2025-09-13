@@ -26,7 +26,8 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
 
   // Phone
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _otpController = TextEditingController();
+  final TextEditingController _phonePasswordController =
+      TextEditingController(); // Added for phone tab password
   bool _otpSent = false;
   bool _phoneLoading = false;
   String? _verificationId;
@@ -64,7 +65,7 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
     _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
-    _otpController.dispose();
+    _phonePasswordController.dispose(); // Dispose phone password controller
     super.dispose();
   }
 
@@ -81,90 +82,95 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 8),
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Log In',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
+      body: Padding(
+        // Added Padding to the body
+        padding: const EdgeInsets.symmetric(
+            horizontal: 20.0), // Padding for the whole body content
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Log In',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-          // Promotional section with image
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
-                      children: [
-                        const TextSpan(text: 'Deposit to Get Up to '),
-                        TextSpan(
-                          text: '\$1000 Bonus',
-                          style: TextStyle(
-                            color: Colors.green.shade600,
-                            fontWeight: FontWeight.bold,
-                          ),
+            // Promotional section with image
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
                         ),
-                      ],
+                        children: [
+                          const TextSpan(text: 'Deposit to Get Up to '),
+                          TextSpan(
+                            text: '\$1000 Bonus',
+                            style: TextStyle(
+                              color: Colors.green.shade600,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                // Login illustration image
-                SizedBox(
-                  width: 100,
-                  height: 80,
-                  child: Image.asset(
-                    'assets/login_img.png',
-                    fit: BoxFit.contain,
+                  // Login illustration image
+                  SizedBox(
+                    width: 100,
+                    height: 80,
+                    child: Image.asset(
+                      'assets/login_img.png', // Ensure this asset path is correct
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          // Tab bar
-          Container(
-            color: Colors.white,
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey.shade500,
-              indicatorColor: Colors.black,
-              indicatorWeight: 2,
-              labelStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                ],
               ),
-              tabs: const [
-                Tab(text: 'Email'),
-                Tab(text: 'Phone'),
-              ],
             ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildEmailTab(context),
-                _buildPhoneTab(context),
-              ],
+            // Tab bar
+            Container(
+              color: Colors.white,
+              child: TabBar(
+                controller: _tabController,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.grey.shade500,
+                indicatorColor: Colors.black,
+                indicatorWeight: 2,
+                labelStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                tabs: const [
+                  Tab(text: 'Email'),
+                  Tab(text: 'Phone'),
+                ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildEmailTab(context),
+                  _buildPhoneTab(context),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -175,7 +181,7 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -202,11 +208,19 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Forgot Password ?',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 14,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  // TODO: Implement forgot password logic
+                },
+                child: const Text(
+                  'Forgot Password ?',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -242,23 +256,28 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
                           );
                           // Navigate back to main app - the app state will handle profile navigation
                           // Add a small delay to ensure app state is updated
-                          await Future.delayed(const Duration(milliseconds: 300));
+                          await Future.delayed(
+                              const Duration(milliseconds: 300));
                           if (!mounted) return;
-                          
+
                           // Check if we can pop or need to use NavigationService
                           if (Navigator.of(context).canPop()) {
                             Navigator.of(context).pop();
                           } else {
                             // If there's no route to pop to, use NavigationService to navigate to main
                             try {
-                              NavigationService().navigateToAndClear(AppRoutes.main);
+                              NavigationService()
+                                  .navigateToAndClear(AppRoutes.main);
                             } catch (e) {
                               debugPrint('Error navigating after login: $e');
                               // Fallback navigation if the above fails
-                              NavigationService().navigatorKey.currentState?.pushNamedAndRemoveUntil(
-                                AppRoutes.main,
-                                (route) => false,
-                              );
+                              NavigationService()
+                                  .navigatorKey
+                                  .currentState
+                                  ?.pushNamedAndRemoveUntil(
+                                    AppRoutes.main,
+                                    (route) => false,
+                                  );
                             }
                           }
                         }
@@ -333,14 +352,15 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
   }
 
   Widget _buildPhoneTab(BuildContext context) {
-    final bool canSend = _phoneController.text.trim().isNotEmpty && !_otpSent;
-    final bool canVerify =
-        _otpController.text.trim().length >= 4 && _verificationId != null;
+    // Determine if the "Log In" button should be enabled for phone tab
+    // It should be enabled if both phone number and password are not empty.
+    final bool canLoginPhone = _phoneController.text.trim().isNotEmpty &&
+        _phonePasswordController.text.trim().isNotEmpty;
 
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -399,16 +419,19 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       ),
+                      onChanged: (_) =>
+                          setState(() {}), // Update state on change
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            // Password field (shown in Phone tab as per screenshot)
+            // Password field (for phone number login)
             _input(
               hint: 'Enter Password',
-              controller: _passwordController,
+              controller:
+                  _phonePasswordController, // Use _phonePasswordController
               obscure: _obscure,
               suffix: IconButton(
                 icon: Icon(
@@ -419,169 +442,109 @@ class _ManualLoginScreenState extends State<ManualLoginScreen>
                 ),
                 onPressed: () => setState(() => _obscure = !_obscure),
               ),
-              onChanged: (_) => setState(() {}),
+              onChanged: (_) => setState(() {}), // Update state on change
             ),
-            if (_otpSent) ...[
-              const SizedBox(height: 16),
-              _input(
-                hint: 'Enter OTP',
-                controller: _otpController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-            ],
             const SizedBox(height: 16),
-            const Text(
-              'Forgot Password ?',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 14,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  // TODO: Implement forgot password logic for phone
+                },
+                child: const Text(
+                  'Forgot Password ?',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ),
             const Spacer(),
-            // Action button
-            if (!_otpSent)
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: !_phoneLoading && canSend
-                      ? () async {
-                          setState(() => _phoneLoading = true);
-                          final phoneWithCode =
-                              '$_selectedCountryCode${_phoneController.text}';
-                          final verId = await AuthService.instance.sendPhoneOtp(
-                            phoneNumber: phoneWithCode,
-                          );
-                          if (!mounted) return;
-                          setState(() {
-                            _phoneLoading = false;
-                            _otpSent = verId != null;
-                            _verificationId = verId;
-                          });
-                          if (verId == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Failed to send OTP'),
-                              ),
-                            );
-                          }
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        canSend ? Colors.black87 : Colors.grey.shade300,
-                    foregroundColor:
-                        canSend ? Colors.white : Colors.grey.shade600,
-                    disabledBackgroundColor: Colors.grey.shade300,
-                    disabledForegroundColor: Colors.grey.shade600,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: _phoneLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white)),
-                        )
-                      : const Text(
-                          'Log In',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+            // Log In button for phone tab
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed: !_phoneLoading && canLoginPhone
+                    ? () async {
+                        // Implement phone number and password login logic here
+                        setState(() => _phoneLoading = true);
+                        // For demonstration, let's just show a success message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Logging in with ${_selectedCountryCode}${_phoneController.text} and password'),
+                            backgroundColor: Colors.blue,
                           ),
-                        ),
-                ),
-              )
-            else
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: !_phoneLoading && canVerify
-                      ? () async {
-                          setState(() => _phoneLoading = true);
-                          final user =
-                              await AuthService.instance.verifyPhoneOtp(
-                            verificationId: _verificationId!,
-                            smsCode: _otpController.text.trim(),
-                          );
-                          if (!mounted) return;
-                          setState(() => _phoneLoading = false);
-                          if (user == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Invalid OTP or error'),
-                              ),
-                            );
-                          } else {
-                            // Show success message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Welcome back, ${user.displayName ?? user.phoneNumber}!'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                            // Navigate back to main app - the app state will handle profile navigation
-                            // Add a small delay to ensure app state is updated
-                            await Future.delayed(const Duration(milliseconds: 300));
-                            if (!mounted) return;
-                            
-                            // Check if we can pop or need to use NavigationService
-                            if (Navigator.of(context).canPop()) {
-                              Navigator.of(context).pop();
-                            } else {
-                              // If there's no route to pop to, use NavigationService to navigate to main
-                              try {
-                                NavigationService().navigateToAndClear(AppRoutes.main);
-                              } catch (e) {
-                                debugPrint('Error navigating after OTP verification: $e');
-                                // Fallback navigation if the above fails
-                                NavigationService().navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                        );
+                        await Future.delayed(const Duration(
+                            seconds: 1)); // Simulate network request
+                        setState(() => _phoneLoading = false);
+                        // In a real app, you would call your AuthService here
+                        // For example:
+                        // final user = await AuthService.instance.signInWithPhoneNumberAndPassword(
+                        //   phoneNumber: '${_selectedCountryCode}${_phoneController.text}',
+                        //   password: _phonePasswordController.text,
+                        // );
+                        // if (user != null) {
+                        //   // Handle successful login
+                        // } else {
+                        //   // Handle error
+                        // }
+
+                        // After successful login, you would navigate.
+                        // For this example, let's just pop or navigate to main.
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop();
+                        } else {
+                          try {
+                            NavigationService()
+                                .navigateToAndClear(AppRoutes.main);
+                          } catch (e) {
+                            debugPrint(
+                                'Error navigating after phone login: $e');
+                            NavigationService()
+                                .navigatorKey
+                                .currentState
+                                ?.pushNamedAndRemoveUntil(
                                   AppRoutes.main,
                                   (route) => false,
                                 );
-                              }
-                            }
                           }
                         }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        canVerify ? Colors.black87 : Colors.grey.shade300,
-                    foregroundColor:
-                        canVerify ? Colors.white : Colors.grey.shade600,
-                    disabledBackgroundColor: Colors.grey.shade300,
-                    disabledForegroundColor: Colors.grey.shade600,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 0,
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      canLoginPhone ? Colors.black87 : Colors.grey.shade300,
+                  foregroundColor:
+                      canLoginPhone ? Colors.white : Colors.grey.shade600,
+                  disabledBackgroundColor: Colors.grey.shade300,
+                  disabledForegroundColor: Colors.grey.shade600,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
                   ),
-                  child: _phoneLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white)),
-                        )
-                      : const Text(
-                          'Verify OTP',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                  elevation: 0,
                 ),
+                child: _phoneLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white)),
+                      )
+                    : const Text(
+                        'Log In', // Changed to "Log In" as per screenshot
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ),
+            ),
             const SizedBox(height: 16),
             // Register link
             Center(
